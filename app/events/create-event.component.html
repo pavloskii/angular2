@@ -27,11 +27,12 @@
             />
         </div>
 
-        <div ngModelGroup="location">
+        <div ngModelGroup="location" #locationGroup="ngModelGroup" validateLocation>
             <div class="form-group">
                 <label for="address">Event Location:</label>
                 <input (ngModel)="address" name="address" id="address" type="text" class="form-control" placeholder="Address of event..."
                 />
+                <em *ngIf="locationGroup?.invalid && locationGroup?.touched">You must enter either the full location OR an online Url</em>
             </div>
             <div class="row">
                 <div class="col-md-6">
@@ -53,11 +54,11 @@
             <em *ngIf="newEventForm.controls.imageUrl?.invalid && newEventForm.controls.imageUrl?.touched && newEventForm.controls.imageUrl?.errors.required">Required</em>
             <em *ngIf="newEventForm.controls.imageUrl?.invalid && newEventForm.controls.imageUrl?.touched  && newEventForm.controls.imageUrl?.errors.pattern">Must be a png or jpg url</em>
             <input (ngModel)="imageUrl" name="imageUrl" required pattern=".*\/.*.(png|jpg)" id="imageUrl" type="text" class="form-control"
-                placeholder="url of image..." />
-            <img [src]="newEventForm.controls.imageUrl.value" *ngIf="newEventForm.controls.imageUrl?.valid"/>
+                placeholder="url of image..." (change)="locationGroup.control.controls.address.updateValueAndValidity()" />
+            <img [src]="newEventForm.controls.imageUrl.value" *ngIf="newEventForm.controls.imageUrl?.valid" />
         </div>
 
-        <button type="submit" class="btn btn-primary">Save</button>
-        <button type="button" [disabled]="newEventForm.invalid" class="btn btn-default" (click)="cancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="newEventForm.invalid">Save</button>
+        <button type="button" class="btn btn-default" (click)="cancel()">Cancel</button>
     </form>
 </div>
